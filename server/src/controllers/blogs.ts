@@ -2,11 +2,18 @@ import { Request,Response } from "express";
 import { IBlogForm } from "../interfaces/blogs";
 import { blogService } from "../services/blogs";
 
+import { validationResult } from 'express-validator';
+
 export const createBlog = async (req:Request,res:Response) => {
-    const {title,subtitle,text,img} = req.body as IBlogForm;
+    const {title,subtitle,text,img, catagory} = req.body as IBlogForm;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
     try {
-        const {newBlog} = await blogService.createBlog({title,subtitle,text,img});
+        const {newBlog} = await blogService.createBlog({title,subtitle,text,img, catagory});
         res.status(201).json({message:"new blog created successfully", data: {newBlog}});
     } catch (error) {
         res.status(400).json({message:error.message});
