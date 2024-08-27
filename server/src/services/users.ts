@@ -4,8 +4,8 @@ import { User } from "../models/users";
 
 export class userService {
     static async createUser(userData:IUserForm) {
-        const newBlog = await User.create(userData);
-        return {newBlog};
+        const newUser = await User.create({...userData});
+        return {newUser};
     }
     static async getAllUser(){
         // const allBlogs = await Blog.find();
@@ -27,8 +27,8 @@ export class userService {
         const user = await User.findOne({username})
         return user;
     }
-    static async getUserByEmail(id: string, data:IUserForm){
-        // const blog = await Blog.findByIdAndUpdate({_id: id}, data);
-        // return blog;
+    static async getUserByEmail(email: string){
+        const user = await User.findOne({email});
+        return user;
     }
 }

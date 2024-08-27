@@ -1,26 +1,45 @@
 import { Request,Response } from "express";
-import { User } from "../models/users";
 import bcrypt from "bcrypt";
 import { userService } from "../services/users";
+import jwt from "jsonwebtoken";
+import { generateToken } from "../utils/jwt";
 
 export const signUp = async (req:Request, res:Response) => {
-    const {username,email,password, image} = req.body;
+    const {username, email} = req.body;
 
     try {
         const salt = 10;
-        const hashedPassword = bcrypt.hash(req.body.password, salt);
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
         const userByUsername = await userService.getUserByUsername(username);
-        if(userByUsername) return res.status(400).json({message:"user already exist"});
-
-
+        const userByEmail = await userService.getUserByEmail(email);
+        if(userByUsername || userByEmail) return res.status(400).json({message:"user already exist"});
         
+        const user = await userService.createUser({...req.body, password:hashedPassword});
+        res.status(201).json({message:"User created successfully", user})
     } catch (error) {
-        
+        res.status(400).json({message:error});
     }
 }
 
 
 export const logIn = async(req:Request,res:Response) => {
+    const {username, password} = req.body;
+    try {
+        const userByUsername = await userService.getUserByUsername(username);
+        if(!userByUsername) return res.status(404).json({message:"User is not exist"});
+
+        const isMatch = await bcrypt.compare(password, userByUsername.password);
+        if(!isMatch) return res.status(404).json({message:"Password Incorrect"});
+
+        const token = generateToken({userId: userByUsername._id, role: "basic"})
+
+        console.log(userByUsername._id)
+
+        // res.status(200).json({message:"user logged in successfully", token})
+
+    } catch (error) {
+    res.status(400).json({message:error})        
+    }
 
 }
 

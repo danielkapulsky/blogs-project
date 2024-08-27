@@ -11,3 +11,8 @@ export interface IUserEntity extends IUserForm{
 }
 
 export type UserRole = "admin" | "basic"
+
+export interface IJWTPayload {
+    userId:any
+    role: UserRole
+}
