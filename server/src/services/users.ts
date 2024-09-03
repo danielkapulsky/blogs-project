@@ -8,20 +8,20 @@ export class userService {
         return {newUser};
     }
     static async getAllUser(){
-        // const allBlogs = await Blog.find();
-        // return {allBlogs}
+        const alluser = await User.find();
+        return {alluser}
     }
     static async getUserById(id: string){
-        // const blog = await Blog.findOne({_id:id})
-        // return blog;
+        const user = await User.findOne({_id:id})
+        return user;
     }
     static async deleteUserById(id: string){
-        // const blog = await Blog.findByIdAndDelete({_id: id});
-        // return blog;
+        const user = await User.findByIdAndDelete({_id: id});
+        return user;
     }
     static async editUserById(id: string, data:IUserForm){
-        // const blog = await Blog.findByIdAndUpdate({_id: id}, data);
-        // return blog;
+        const user = await User.findByIdAndUpdate({_id: id}, data);
+        return user;
     }
     static async getUserByUsername(username: string){
         const user = await User.findOne({username})

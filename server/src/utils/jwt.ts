@@ -5,10 +5,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const EXPIRE_TIME = "24h";
-const secret = process.env.JWT_TOKEN;
+const secret = process.env.JWT_SECRET || "hdfskufhsdfhdsufkfsdjfhdsfkjsdjfs";
 
 export const generateToken = (payload: IJWTPayload) => {
-  if (!secret) throw new Error("JWT Secret is not defined");
 
   return jwt.sign(payload, secret, {expiresIn:EXPIRE_TIME});
 };

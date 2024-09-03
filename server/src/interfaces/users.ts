@@ -6,6 +6,7 @@ export interface IUserForm{
     role?:UserRole
 }
 export interface IUserEntity extends IUserForm{
+    _id: string
     createdAt?: Date;
     updatedAt?: Date;
 }
