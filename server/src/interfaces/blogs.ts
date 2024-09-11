@@ -4,11 +4,11 @@ export interface IBlogForm {
   text: string;
   img: string;
   catagory: string;
+  userId: string;
 }
 
 export interface IBlogEntity extends IBlogForm {
   likes: string[];
-  userId?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

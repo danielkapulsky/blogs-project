@@ -8,7 +8,7 @@ const blogSchema = new mongoose.Schema<IBlogEntity>({
     img: {type: String, required: true},
     likes: [{type: String}],
     catagory: {type: String, required: true},
-    // userId: {type: String, required:true},
+    userId: {type: String, required:true},
 },{timestamps:true});
 
 export const Blog = mongoose.model("Blog",blogSchema)
