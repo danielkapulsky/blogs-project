@@ -2,9 +2,15 @@ import { Request,Response } from "express";
 import bcrypt from "bcrypt";
 import { userService } from "../services/users";
 import { generateToken } from "../utils/jwt";
+import { validationResult } from 'express-validator';
 
 export const signUp = async (req:Request, res:Response) => {
     const {username, email} = req.body;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
     try {
         const salt = 10;
@@ -41,7 +47,7 @@ export const logIn = async(req:Request,res:Response) => {
 }
 
 
-export const getAll = async(req, res) => {
+export const getAll = async(req:Request,res:Response) => {
     try{    
         const allUsers = await userService.getAllUser();
 
@@ -53,7 +59,7 @@ export const getAll = async(req, res) => {
 }
 
 
-export const getUserById = async(req, res) => {
+export const getUserById = async(req:Request,res:Response) => {
 
     const {id} = req.params;
 
@@ -68,7 +74,7 @@ export const getUserById = async(req, res) => {
 }
 
 
-export const editUserById = async(req ,res) => {
+export const editUserById = async(req:Request,res:Response) => {
     
     const {id} = req.params;
     const {password} = req.body;
@@ -87,7 +93,7 @@ export const editUserById = async(req ,res) => {
 }
 
 
-export const deleteUserById = async(req, res) => {
+export const deleteUserById = async(req:Request,res:Response) => {
 
     const {id} = req.params;
 
