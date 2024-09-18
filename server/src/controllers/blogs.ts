@@ -48,7 +48,7 @@ export const deleteBlogById = async (req: AuthenticatedRequest, res: Response) =
 
     try{
         const blog = await blogService.getBlogById(id);
-        // if(blog.id !== userId) return res.status(401).json({"unauthorized"});
+        if(userId !== blog.userId)  return res.sendStatus(401).json({message: "Unauthorized, must be the user who created the blog"});
 
         const deletedBlog = await blogService.deleteBlogById(id);
         if (!deletedBlog) return res.status(404).json({message: "blog not found"});
@@ -59,15 +59,39 @@ export const deleteBlogById = async (req: AuthenticatedRequest, res: Response) =
     }
 }
 
-export const editBlogById = async (req: Request, res: Response) => {
+export const editBlogById = async (req: AuthenticatedRequest, res: Response) => {
     const {id} = req.params;
+    const userId = req.userId;
+
     try{
+        const blog = await blogService.getBlogById(id);
+        if(userId !== blog.userId)  return res.sendStatus(401).json({message: "Unauthorized, must be the user who created the blog"});
+
         const updatedBlog = await blogService.editBlogById(id, req.body);
         if(!updatedBlog) return res.status(401).json({message:"blog not found"});
 
         const blogs = await blogService.getAllBlogs();
-        res.status(200).json({message: "blog deleted succefully" , data: {blogs , updatedBlog}})
+        res.status(200).json({message: "blog edited succefully" , data: {blogs , updatedBlog}})
     }catch(error){
         res.status(401).json({message: error.message})
     }
 }
+
+export const toggleBlogLike = async (req: AuthenticatedRequest, res: Response) => {
+    const {id} = req.params;
+    const userId = req.userId;
+
+    try{
+        const blog = await blogService.getBlogById(id);
+        if(!blog) return res.status(404).json({message: "Blog not found"});
+        const isAlreadyLiked = blog.likes.includes(userId);
+        const query = isAlreadyLiked ? {$pull: {likes: userId}} : {$push: {likes: userId}};
+
+        const updatedBlog = await blogService.toggleById(id, query);
+
+        res.status(200).json({message: "blog edited succefully" , data: {blog: updatedBlog}})
+    }catch(error){
+        res.status(401).json({message: error.message})
+    }
+}
+

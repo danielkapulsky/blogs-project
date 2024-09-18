@@ -8,6 +8,7 @@ export interface IBlogForm {
 }
 
 export interface IBlogEntity extends IBlogForm {
+  _id: string
   likes: string[];
   createdAt?: Date;
   updatedAt?: Date;

@@ -22,4 +22,8 @@ export class blogService {
         const blog = await Blog.findByIdAndUpdate({_id: id}, data);
         return blog;
     }
+    static async toggleById(id: string, data:any){
+        const blog = await Blog.findByIdAndUpdate({_id: id}, data);
+        return blog;
+    }
 }
