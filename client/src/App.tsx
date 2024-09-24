@@ -1,14 +1,27 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Outlet } from 'react-router-dom';
 import './App.css'
-import Button from '@mui/material/Button';
+import Navbar from './components/navbar/Navbar';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    // primary: {
+    //   main: '#333',
+    // },
+  },
+});
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <Button variant="contained">Hello world</Button>
+    <ThemeProvider theme={darkTheme}>
+      <div className='"app'>
+        <Navbar />
+        <Outlet />
+      </div>
+    </ThemeProvider>
+
   )
 }
 
