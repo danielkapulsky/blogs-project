@@ -13,7 +13,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
+import { FaBlogger } from "react-icons/fa";
 
 interface Props {
   window?: () => Window;
@@ -24,6 +25,10 @@ const navItems = [
   { label: 'Home', path: '/' },
   { label: 'Login', path: '/login' },
   { label: 'Signup', path: '/signup' },
+  { label: 'Favorites', path: '/favorites' },
+  { label: 'My Blogs', path: '/myBlogs' },
+  { label: 'Create Blog', path: '/createBlog' },
+  { label: 'Users', path: '/users' },
 ];
 
 const Navbar = (props: Props) => {
@@ -37,7 +42,7 @@ const Navbar = (props: Props) => {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        MUI
+        <FaBlogger size={30}/>
       </Typography>
       <Divider />
       <List>
@@ -73,7 +78,7 @@ const Navbar = (props: Props) => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            <FaBlogger size={30}/>
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
