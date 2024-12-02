@@ -24,7 +24,7 @@ export const createBlog = async (req:AuthenticatedRequest,res:Response) => {
 export const getAllBlogs = async (req: Request, res: Response) => {
     try{
         const {allBlogs} = await blogService.getAllBlogs();
-        res.status(200).json({message: "got all blogs successfuly", data: {allBlogs}})
+        res.status(200).json({message: "got all blogs successfuly", data: allBlogs})
     }catch(error){
         res.status(400).json({message: error.message})
     }

@@ -14,3 +14,8 @@ export interface IBlogForm {
     updatedAt?: Date;
   }
   
+
+  export interface IBlogsResponse {
+    message: string
+    data: IBlogEntity[]
+  }

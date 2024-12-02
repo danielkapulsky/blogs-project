@@ -1,5 +1,5 @@
-import React from 'react'
 import { IBlogEntity } from '../../interfaces/blogInterface';
+import { useGetAllBlogsQuery } from '../../services/blog';
 import BlogItem from './components/BlogItem';
 import { Stack } from '@mui/material';
 
@@ -67,6 +67,10 @@ const blogData: IBlogEntity[] = [
 ];
 
 const Home = () => {
+  const {data, isLoading, error} = useGetAllBlogsQuery();
+
+  console.log(data)
+
   return (
     <div>
       <Stack spacing={5}>
