@@ -1,9 +1,17 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Stack, TextField, Typography } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
+import validator from 'validator';
 
 const Signup = () => {
   const [showPassword, setShowPassword] = React.useState(false);
+  const [errors, setErrors] = useState({});
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    image: '',
+  });
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -14,6 +22,21 @@ const Signup = () => {
   const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
+
+  // const validateForm = () => {
+  //   const newErrors = {};
+  //   if (validator.isEmpty(formData.username)) {
+  //     newErrors.username = 'Username is required';
+  //   }
+  //   if (!validator.isEmail(formData.email)) {
+  //     newErrors.email = 'Invalid email address';
+  //   }
+  //   if (!validator.isLength(formData.password, { min: 6 })) {
+  //     newErrors.password = 'Password must be at least 6 characters long';
+  //   }
+  //   setErrors(newErrors);
+  //   return Object.keys(newErrors).length === 0;
+  // };
 
   return (
     <Paper

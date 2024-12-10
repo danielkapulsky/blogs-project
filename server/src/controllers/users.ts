@@ -20,7 +20,7 @@ export const signUp = async (req:Request, res:Response) => {
         if(userByUsername || userByEmail) return res.status(400).json({message:"user already exist"});
         
         const user = await userService.createUser({...req.body, password:hashedPassword});
-        res.status(201).json({message:"User created successfully", user})
+        res.status(201).json({message:"User created successfully", data: user})
     } catch (error) {
         res.status(400).json({message:error});
     }
