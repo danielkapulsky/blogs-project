@@ -2,15 +2,17 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Stack, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import validator from 'validator';
+import { IError } from '../../interfaces/userInterface';
+
 
 const Signup = () => {
   const [showPassword, setShowPassword] = React.useState(false);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<IError | null>(null);
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    image: '',
+    username: undefined,
+    email: undefined,
+    password: undefined,
+    image: undefined,
   });
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -23,20 +25,51 @@ const Signup = () => {
     event.preventDefault();
   };
 
-  // const validateForm = () => {
-  //   const newErrors = {};
-  //   if (validator.isEmpty(formData.username)) {
-  //     newErrors.username = 'Username is required';
-  //   }
-  //   if (!validator.isEmail(formData.email)) {
-  //     newErrors.email = 'Invalid email address';
-  //   }
-  //   if (!validator.isLength(formData.password, { min: 6 })) {
-  //     newErrors.password = 'Password must be at least 6 characters long';
-  //   }
-  //   setErrors(newErrors);
-  //   return Object.keys(newErrors).length === 0;
-  // };
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const validateForm = () => {
+    const newErrors = {} as IError;
+
+    // Username validation
+    if (validator.isEmpty(formData.username)) {
+      newErrors.username = 'Username is required';
+    } else if (!validator.isLength(formData.username, { min: 2, max: 100 })) {
+      newErrors.username = 'Username must be between 2 and 100 characters';
+      console.log(newErrors.username)
+    }
+
+    // Email validation
+    if (!validator.isEmail(formData.email)) {
+      newErrors.email = 'Must be a valid email address';
+      console.log(newErrors.email)
+    } 
+
+    // Password validation
+    if (!validator.isStrongPassword(formData.password)) {
+      newErrors.password =
+        'Password must include at least 8 characters, 1 uppercase, 1 lowercase, 1 number, and 1 symbol';
+      console.log(newErrors.password)
+    } 
+
+    // Image URL validation
+    if (!validator.isURL(formData.image)) {
+      newErrors.image = 'Please enter a valid image URL';
+      console.log(newErrors.image)
+    } 
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (validateForm()) {
+      console.log('Form submitted:', formData);
+    }
+  };
 
   return (
     <Paper
@@ -52,30 +85,38 @@ const Signup = () => {
       <Typography variant="h4" gutterBottom align="center">
         Signup
       </Typography>
-      <form /* onSubmit={handleSubmit} */>
+      <form onSubmit={handleSubmit}>
         <Stack spacing={3}>
           <TextField
             label="Username"
             name="username"
             variant="outlined"
             fullWidth
-          // value={formData.name}
-          // onChange={handleChange}
+            value={formData.username}
+            onChange={handleChange}
+            error={errors?.username !== undefined}
+            helperText={errors?.username}
           />
           <TextField
             label="Email"
             name="email"
             type="email"
             variant="outlined"
+            error={errors?.email !== undefined}
+            helperText={errors?.username}
             fullWidth
-          // value={formData.email}
-          // onChange={handleChange}
+            value={formData.email}
+            onChange={handleChange}
           />
           <FormControl variant="outlined">
             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
             <OutlinedInput
               id="outlined-adornment-password"
               type={showPassword ? 'text' : 'password'}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              error={errors?.password !== undefined}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -91,14 +132,19 @@ const Signup = () => {
               }
               label="Password"
             />
+            <Typography variant="caption" color="error">
+              {errors?.password}
+            </Typography>
           </FormControl>
           <TextField
             label="Image"
             name="image"
             variant="outlined"
             fullWidth
-          // value={formData.email}
-          // onChange={handleChange}
+            value={formData.image}
+            onChange={handleChange}
+            error={errors?.image !== undefined}
+            helperText={errors?.image}
           />
           <Button variant="contained" color="primary" type="submit" fullWidth>
             Submit

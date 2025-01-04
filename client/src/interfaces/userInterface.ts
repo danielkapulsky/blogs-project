@@ -17,3 +17,11 @@ export interface IUsersResponse {
   message: string;
   data: IUserEntity[];
 }
+
+
+export interface IError {
+  username: string 
+  email: string 
+  password: string 
+  image: string 
+}
