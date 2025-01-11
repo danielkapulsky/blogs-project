@@ -1,7 +1,6 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { IBlogsResponse } from "../interfaces/blogInterface";
-import { IUserForm, IUsersResponse } from "../interfaces/userInterface";
+import { IUserForm, IUsersResponse , IUserAuth} from "../interfaces/userInterface";
 
 // Define a service using a base URL and expected endpoints
 export const userApi = createApi({
@@ -20,12 +19,21 @@ export const userApi = createApi({
         query:(user) => ({
             url:"/signUp",
             method:"POST",
-            body:{user,}
-        })
+            body:user
+        }),
+        invalidatesTags:["User"],
+    }),
+    logInUser: builder.mutation<IUsersResponse , IUserAuth >({
+      query: (auth) => ({
+        url:"/logIn",
+        method:"POST",
+        body: auth
+      }),
+      invalidatesTags:["User"],
     })
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetAllUsersQuery, useCreateUserMutation } = userApi;
+export const { useGetAllUsersQuery, useCreateUserMutation , useLogInUserMutation } = userApi;

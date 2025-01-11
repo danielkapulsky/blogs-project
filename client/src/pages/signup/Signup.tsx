@@ -2,17 +2,18 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Stack, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import validator from 'validator';
-import { IError } from '../../interfaces/userInterface';
-
+import { IError, IUserForm } from '../../interfaces/userInterface';
+import { useCreateUserMutation } from '../../services/user';
 
 const Signup = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [errors, setErrors] = useState<IError | null>(null);
-  const [formData, setFormData] = useState({
-    username: undefined,
-    email: undefined,
-    password: undefined,
-    image: undefined,
+  const [createUser] = useCreateUserMutation();
+  const [formData, setFormData] = useState<IUserForm>({
+    username: '',
+    email: '',
+    password: '',
+    image: '',
   });
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -45,29 +46,36 @@ const Signup = () => {
     if (!validator.isEmail(formData.email)) {
       newErrors.email = 'Must be a valid email address';
       console.log(newErrors.email)
-    } 
+    }
 
     // Password validation
     if (!validator.isStrongPassword(formData.password)) {
       newErrors.password =
         'Password must include at least 8 characters, 1 uppercase, 1 lowercase, 1 number, and 1 symbol';
       console.log(newErrors.password)
-    } 
+    }
 
     // Image URL validation
     if (!validator.isURL(formData.image)) {
       newErrors.image = 'Please enter a valid image URL';
       console.log(newErrors.image)
-    } 
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (validateForm()) {
-      console.log('Form submitted:', formData);
+      // console.log('Form submitted:', formData);
+    }else return;
+
+    try {
+      console.log(formData)
+      const res = await createUser(formData);
+    } catch (error) {
+      console.error(error);
     }
   };
 

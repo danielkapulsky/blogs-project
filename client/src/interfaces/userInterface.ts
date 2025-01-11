@@ -25,3 +25,8 @@ export interface IError {
   password: string 
   image: string 
 }
+
+export interface IUserAuth {
+  username: string
+  password: string
+}
