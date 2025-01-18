@@ -1,7 +1,10 @@
-export interface IUserForm {
-  username: string;
+export interface IUserAuth {
+  username: string
+  password: string
+}
+
+export interface IUserForm extends IUserAuth {
   email: string;
-  password: string;
   image: string;
   role?: UserRole;
 }
@@ -24,9 +27,4 @@ export interface IError {
   email: string 
   password: string 
   image: string 
-}
-
-export interface IUserAuth {
-  username: string
-  password: string
 }

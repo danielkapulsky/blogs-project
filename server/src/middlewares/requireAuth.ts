@@ -8,10 +8,8 @@ export interface AuthenticatedRequest extends Request {
 }
 
 export const requireAuth = async (req:AuthenticatedRequest,res:Response,next:NextFunction) => {
-        const {authorization} = req.headers;
-        
-        if(!authorization) return res.status(401).json({message:"Authorization token required"});
-        const token = authorization.split(" ")[1];
+        const token = req.cookies.authToken;
+        if(!token) return res.status(401).json({message:"Authorization token required"});
 
     try {
         const {userId, role} = jwt.verify(token, process.env.JWT_SECRET) as IJWTPayload;

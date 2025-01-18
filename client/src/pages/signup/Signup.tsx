@@ -34,7 +34,6 @@ const Signup = () => {
   const validateForm = () => {
     const newErrors = {} as IError;
 
-    // Username validation
     if (validator.isEmpty(formData.username)) {
       newErrors.username = 'Username is required';
     } else if (!validator.isLength(formData.username, { min: 2, max: 100 })) {
@@ -42,20 +41,17 @@ const Signup = () => {
       console.log(newErrors.username)
     }
 
-    // Email validation
     if (!validator.isEmail(formData.email)) {
       newErrors.email = 'Must be a valid email address';
       console.log(newErrors.email)
     }
 
-    // Password validation
     if (!validator.isStrongPassword(formData.password)) {
       newErrors.password =
         'Password must include at least 8 characters, 1 uppercase, 1 lowercase, 1 number, and 1 symbol';
       console.log(newErrors.password)
     }
 
-    // Image URL validation
     if (!validator.isURL(formData.image)) {
       newErrors.image = 'Please enter a valid image URL';
       console.log(newErrors.image)
@@ -68,7 +64,6 @@ const Signup = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (validateForm()) {
-      // console.log('Form submitted:', formData);
     }else return;
 
     try {

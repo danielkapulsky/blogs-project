@@ -5,7 +5,7 @@ import { IUserForm, IUsersResponse , IUserAuth} from "../interfaces/userInterfac
 // Define a service using a base URL and expected endpoints
 export const userApi = createApi({
   reducerPath: "userApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:2011/api/users" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:2011/api/users", credentials: "include",}),
   tagTypes: ["User"],
   endpoints: (builder) => ({
     getAllUsers: builder.query<IUsersResponse, void>({
