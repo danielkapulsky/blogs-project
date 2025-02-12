@@ -28,3 +28,8 @@ export interface IError {
   password: string 
   image: string 
 }
+
+export interface UserPayload {
+  _id: string
+  role: UserPayload
+}

@@ -4,12 +4,19 @@ import React, { useState } from 'react'
 import validator from 'validator';
 import { IError, IUserAuth } from '../../interfaces/userInterface';
 import { useLogInUserMutation } from '../../services/user';
+import Cookies from "js-cookie";
+import { useDispatch } from 'react-redux';
+import { setAuthToken } from '../../services/authSlice';
+import { useNavigate } from 'react-router-dom';
+
 
 const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [errors, setErrors] = useState<IError | null>(null);
   const [formData, setFormData] = useState<IUserAuth>({ username: '', password: '' });
   const [logInUser] = useLogInUserMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -53,8 +60,12 @@ const Login = () => {
     } else return;
 
     try {
-      console.log(formData)
       const res = await logInUser(formData);
+      if (!res.error) {
+        const authToken = Cookies.get("authToken");
+        authToken && dispatch(setAuthToken(authToken));
+        navigate("/")
+      }
     } catch (error) {
       console.error(error);
     }

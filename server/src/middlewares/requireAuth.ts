@@ -12,8 +12,8 @@ export const requireAuth = async (req:AuthenticatedRequest,res:Response,next:Nex
         if(!token) return res.status(401).json({message:"Authorization token required"});
 
     try {
-        const {userId, role} = jwt.verify(token, process.env.JWT_SECRET) as IJWTPayload;
-        req.userId = userId;
+        const {_id, role} = jwt.verify(token, process.env.JWT_SECRET) as IJWTPayload;
+        req.userId = _id;
         req.role = role;
         
         next();

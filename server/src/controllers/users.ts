@@ -42,21 +42,15 @@ export const logIn = async (req: Request, res: Response) => {
     if (!isMatch)
       return res.status(404).json({ message: "Password Incorrect" });
 
-    const token = generateToken({ userId: userByUsername._id, role: "basic" });
+    const token = generateToken({ _id: userByUsername._id, role: "basic" });
 
     res.cookie("authToken", token, {
-        httpOnly: true, // Prevent JavaScript access to cookies
+        httpOnly: false, // Prevent JavaScript access to cookies
         secure:false, // Only secure cookies in production
         sameSite: "strict", // Protect against CSRF
         maxAge: 24 * 60 * 60 * 1000, // 1 day
       }).status(200).json({ message: "user logged in successfully" });
 
-    // res.cookie("authToken", token, {
-    //   httpOnly: false,
-    //   secure: false,
-    //   sameSite: "strict", // Protect against CSRF
-    //   maxAge: 24 * 60 * 60 * 1000,
-    // })
   } catch (error) {
     res.status(400).json({ message: error });
   }
