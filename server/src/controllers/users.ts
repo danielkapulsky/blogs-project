@@ -42,7 +42,7 @@ export const logIn = async (req: Request, res: Response) => {
     if (!isMatch)
       return res.status(404).json({ message: "Password Incorrect" });
 
-    const token = generateToken({ _id: userByUsername._id, role: "basic" });
+    const token = generateToken({ _id: userByUsername._id, role: userByUsername.role });
 
     res.cookie("authToken", token, {
         httpOnly: false, // Prevent JavaScript access to cookies
@@ -112,3 +112,16 @@ export const deleteUserById = async (req: Request, res: Response) => {
     res.status(400).json({ message: error });
   }
 };
+
+
+export const logout = (req: Request, res: Response) => {
+  try {
+    res.clearCookie("authToken", {
+      httpOnly: true,
+      sameSite: "strict"
+    })
+  } catch (error) {
+    res.status(400).json({ message: error });
+    
+  }
+}
