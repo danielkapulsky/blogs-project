@@ -9,8 +9,6 @@ const Home = () => {
   const blogData = data?.data;
   const test = useSelector((state: RootState) => state.auth)
 
-  console.log(test)
-
   return (
     <div>
       <Stack spacing={3} 

@@ -4,11 +4,14 @@ import React, { useState } from 'react'
 import validator from 'validator';
 import { IError, IUserForm } from '../../interfaces/userInterface';
 import { useCreateUserMutation } from '../../services/user';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Signup = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [errors, setErrors] = useState<IError | null>(null);
   const [createUser] = useCreateUserMutation();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<IUserForm>({
     username: '',
     email: '',
@@ -69,6 +72,8 @@ const Signup = () => {
     try {
       console.log(formData)
       const res = await createUser(formData);
+      navigate("/login");
+      toast.success("User Signed up Successfuly")
     } catch (error) {
       console.error(error);
     }

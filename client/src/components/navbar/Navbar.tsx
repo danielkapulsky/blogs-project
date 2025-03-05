@@ -6,9 +6,6 @@ import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -18,6 +15,10 @@ import { FaBlogger } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { clearAuthToken } from '../../services/authSlice';
+import Switch from '@mui/material/Switch';
+import { MdDarkMode, MdLightMode } from "react-icons/md";
+import { toggleTheme } from '../../services/themeSlice';
+import { toast } from 'react-toastify';
 
 interface Props {
   window?: () => Window;
@@ -29,6 +30,7 @@ const Navbar = (props: Props) => {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const auth = useSelector((state: RootState) => state.auth);
+  const theme = useSelector((state: RootState) => state.theme);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -38,10 +40,16 @@ const Navbar = (props: Props) => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       dispatch(clearAuthToken());
-      navigate('/');
+      navigate('/login');
+      toast.success("User Logged out successfully")
     } catch (error) {
       console.error("Logout failed:", error);
     }
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //@ts-ignore
+    dispatch(toggleTheme())
   };
 
 
@@ -111,6 +119,14 @@ const Navbar = (props: Props) => {
           >
             <FaBlogger size={30} />
           </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            {theme === "dark" ? <MdDarkMode size={24} color="white" /> : <MdLightMode size={24} color="yellow" />}
+            <Switch
+              checked={theme === "dark"}
+              onChange={handleChange}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </Box>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.filter((item) => item.shouldDisplay).map((item) =>
               item.label === 'Logout' ? (

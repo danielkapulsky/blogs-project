@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { useDispatch } from 'react-redux';
 import { setAuthToken } from '../../services/authSlice';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 
 const Login = () => {
@@ -64,7 +65,8 @@ const Login = () => {
       if (!res.error) {
         const authToken = Cookies.get("authToken");
         authToken && dispatch(setAuthToken(authToken));
-        navigate("/")
+        navigate("/");
+        toast.success("User Logged in Successfully")
       }
     } catch (error) {
       console.error(error);
