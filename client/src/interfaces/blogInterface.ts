@@ -19,3 +19,11 @@ export interface IBlogForm {
     message: string
     data: IBlogEntity[]
   }
+
+  export interface IBlogError {
+    title: string;
+    subtitle: string;
+    text: string;
+    img: string;
+    catagory: string;
+  }
