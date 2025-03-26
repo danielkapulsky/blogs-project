@@ -5,12 +5,17 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { IBlogEntity } from '../../../interfaces/blogInterface';
-
+import { useNavigate } from 'react-router-dom';
 interface BlogItemProps {
   blog: IBlogEntity
 }
 
 const BlogItem = ({blog}: BlogItemProps) => {
+  const navigate = useNavigate()
+
+  const navigateHandle = (id: string) => {
+    navigate(`/${id}`)
+  }
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
@@ -27,8 +32,8 @@ const BlogItem = ({blog}: BlogItemProps) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
+        {/* <Button size="small">Share</Button> */}
+        <Button size="small" onClick={() => navigateHandle(blog._id)}>More info</Button>
       </CardActions>
     </Card>
   )

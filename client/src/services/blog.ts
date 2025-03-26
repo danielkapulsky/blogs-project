@@ -1,6 +1,6 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { IBlogForm, IBlogsResponse } from "../interfaces/blogInterface";
+import { IBlogEntity, IBlogForm, IBlogsResponse } from "../interfaces/blogInterface";
 import { RootState } from "../store/store";
 
 const baseQuery = fetchBaseQuery({
@@ -28,6 +28,14 @@ export const blogApi = createApi({
       }),
       providesTags:["Blog"],
     }),
+    getBlogById: builder.query<IBlogEntity, string>({
+      query: (id) => ({
+        url: `/${id}`,
+        method: "GET",
+
+      }),
+      providesTags:["Blog"],
+    }),
     createBlog: builder.mutation<IBlogsResponse, IBlogForm>({
       query: (body) =>  ({
         url: "/", 
@@ -41,4 +49,4 @@ export const blogApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetAllBlogsQuery, useCreateBlogMutation } = blogApi;
+export const { useGetAllBlogsQuery, useCreateBlogMutation , useGetBlogByIdQuery} = blogApi;

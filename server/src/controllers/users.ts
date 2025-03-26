@@ -40,7 +40,7 @@ export const logIn = async (req: Request, res: Response) => {
 
     const isMatch = await bcrypt.compare(password, userByUsername.password);
     if (!isMatch)
-      return res.status(404).json({ message: "Password Incorrect" });
+      return res.status(400).json({ message: "Password Incorrect" });
 
     const token = generateToken({ _id: userByUsername._id, role: userByUsername.role });
 

@@ -5,6 +5,8 @@ import { ChangeEvent, useState } from 'react';
 import { IBlogError, IBlogForm } from '../../interfaces/blogInterface';
 import { useCreateBlogMutation } from '../../services/blog';
 import validator from 'validator';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const dropdownOptions = [
   { label: "Nature", value: "nature" },
@@ -17,7 +19,8 @@ const dropdownOptions = [
 const CreateBlog = () => {
   const [blogFormData, setBlogFormData] = useState<IBlogForm>({ title: "", subtitle: "", text: "", img: "", catagory: "" });
   const [createBlog] = useCreateBlogMutation();
-  const [errors, setErrors] = useState<IBlogError | null>(null);
+  const [_errors, setErrors] = useState<IBlogError | null>(null);
+  const navigate = useNavigate()
 
   const onHandleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -63,14 +66,17 @@ const CreateBlog = () => {
 
   const onHandleSubmit = async () => {
     if (validateForm()) {
+      try {
+        const data = await createBlog(blogFormData);
+        navigate("/");
+        toast.success("create blog Successfully")
+        console.log(data);
+      } catch (err) {
+        console.log(err)
+      }
+
     } else return;
     
-    try {
-      const data = await createBlog(blogFormData);
-      console.log(data);
-    } catch (err) {
-      console.log(err)
-    }
   }
 
   return (
