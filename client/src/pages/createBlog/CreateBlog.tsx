@@ -1,4 +1,4 @@
-import { Button, FormControl, InputLabel, MenuItem, Paper, Select, Stack, Typography } from '@mui/material';
+import { Button, FormControl, FormHelperText, InputLabel, MenuItem, Paper, Select, Stack, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
 import { ChangeEvent, useState } from 'react';
@@ -19,7 +19,7 @@ const dropdownOptions = [
 const CreateBlog = () => {
   const [blogFormData, setBlogFormData] = useState<IBlogForm>({ title: "", subtitle: "", text: "", img: "", catagory: "" });
   const [createBlog] = useCreateBlogMutation();
-  const [_errors, setErrors] = useState<IBlogError | null>(null);
+  const [errors, setErrors] = useState<IBlogError | null>(null);
   const navigate = useNavigate()
 
   const onHandleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -59,6 +59,9 @@ const CreateBlog = () => {
       console.log(newErrors.img)
     }
 
+    if (validator.isEmpty(blogFormData.catagory)) {
+      newErrors.catagory = 'Category is required';
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -78,6 +81,8 @@ const CreateBlog = () => {
     } else return;
     
   }
+
+  console.log(errors)
 
   return (
     <div>
@@ -106,6 +111,8 @@ const CreateBlog = () => {
               multiline
               maxRows={4}
               onChange={onHandleChange}
+              error={errors?.title !== undefined}
+              helperText={errors?.title}
             />
             <TextField
               id="outlined-multiline-flexible"
@@ -115,6 +122,8 @@ const CreateBlog = () => {
               multiline
               maxRows={4}
               onChange={onHandleChange}
+              error={errors?.subtitle !== undefined}
+              helperText={errors?.subtitle}
             />
             <TextField
               id="outlined-multiline-flexible"
@@ -124,6 +133,8 @@ const CreateBlog = () => {
               multiline
               maxRows={4}
               onChange={onHandleChange}
+              error={errors?.text !== undefined}
+              helperText={errors?.text}
             />
             <TextField
               id="outlined-multiline-flexible"
@@ -133,9 +144,11 @@ const CreateBlog = () => {
               multiline
               maxRows={4}
               onChange={onHandleChange}
+              error={errors?.img !== undefined}
+              helperText={errors?.img}
             />
 
-            <FormControl fullWidth>
+            <FormControl fullWidth error={errors?.catagory !== undefined}>
               <InputLabel id="category-label">Category</InputLabel>
               <Select
                 labelId="category-label"
@@ -148,6 +161,7 @@ const CreateBlog = () => {
                   <MenuItem key={i} value={option.value}>{option.label}</MenuItem>
                 ))}
               </Select>
+              {errors?.catagory && <FormHelperText>{errors.catagory}</FormHelperText>}
             </FormControl>
             <Button type='submit' variant="contained" endIcon={<SendIcon />} onClick={onHandleSubmit}>
               Send

@@ -43,10 +43,15 @@ export const blogApi = createApi({
         body
       }),
       invalidatesTags: ["Blog"],
+    }),
+    getMyBlogs: builder.query<IBlogsResponse, void>({
+      query: () => ({
+        url: "/myBlogs"
+      })
     })
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetAllBlogsQuery, useCreateBlogMutation , useGetBlogByIdQuery} = blogApi;
+export const { useGetAllBlogsQuery, useCreateBlogMutation , useGetBlogByIdQuery, useGetMyBlogsQuery} = blogApi;

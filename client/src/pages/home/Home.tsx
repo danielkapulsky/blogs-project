@@ -9,9 +9,11 @@ const Home = () => {
   return (
     <div>
       <Stack spacing={3} 
-        direction="row" 
-        flexWrap="wrap" 
-        alignItems="stretch">
+           display="flex"
+           flexDirection="row"
+           flexWrap="wrap"
+           gap="10px"
+           alignItems="flex-end">
         {blogData?.map((blog) => (
           <BlogItem blog={blog} key={blog._id}/>
         ))}

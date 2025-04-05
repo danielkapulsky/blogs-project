@@ -41,6 +41,10 @@ export const getBlogById = async (req: Request, res: Response) => {
     }
 }
 
+export const getMyBlogs = async (req: AuthenticatedRequest, res: Response) => {
+    console.log(req.userId)
+}
+
 export const deleteBlogById = async (req: AuthenticatedRequest, res: Response) => {
     const {id} = req.params;
     const userId = req.userId;
@@ -94,4 +98,3 @@ export const toggleBlogLike = async (req: AuthenticatedRequest, res: Response) =
         res.status(401).json({message: error.message})
     }
 }
-

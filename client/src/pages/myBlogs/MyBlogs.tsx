@@ -1,8 +1,12 @@
-import React from 'react'
+import { useGetMyBlogsQuery } from '../../services/blog';
 
 const MyBlogs = () => {
+   const {data} = useGetMyBlogsQuery();
+   console.log(data)
   return (
-    <div>MyBlogs</div>
+    <div>
+      
+    </div>
   )
 }
 

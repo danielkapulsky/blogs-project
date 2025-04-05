@@ -10,16 +10,23 @@ interface BlogItemProps {
   blog: IBlogEntity
 }
 
-const BlogItem = ({blog}: BlogItemProps) => {
+const BlogItem = ({ blog }: BlogItemProps) => {
   const navigate = useNavigate()
 
   const navigateHandle = (id: string) => {
     navigate(`/${id}`)
   }
+
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{
+      width: 345,
+      height: 400,
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between'
+    }}>
       <CardMedia
-        sx={{ height: 140 }}
+        sx={{ height: 180 }}
         image={blog.img}
         title={blog.title}
       />
@@ -32,7 +39,6 @@ const BlogItem = ({blog}: BlogItemProps) => {
         </Typography>
       </CardContent>
       <CardActions>
-        {/* <Button size="small">Share</Button> */}
         <Button size="small" onClick={() => navigateHandle(blog._id)}>More info</Button>
       </CardActions>
     </Card>
