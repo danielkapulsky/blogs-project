@@ -46,7 +46,8 @@ export const blogApi = createApi({
     }),
     getMyBlogs: builder.query<IBlogsResponse, void>({
       query: () => ({
-        url: "/myBlogs"
+        url: "/myBlogs",
+        method: "GET"
       })
     })
   }),

@@ -23,7 +23,7 @@ export const createBlog = async (req:AuthenticatedRequest,res:Response) => {
 
 export const getAllBlogs = async (req: Request, res: Response) => {
     try{
-        const {allBlogs} = await blogService.getAllBlogs();
+        const allBlogs = await blogService.getAllBlogs();
         res.status(200).json({message: "got all blogs successfuly", data: allBlogs})
     }catch(error){
         res.status(400).json({message: error.message})
@@ -42,7 +42,14 @@ export const getBlogById = async (req: Request, res: Response) => {
 }
 
 export const getMyBlogs = async (req: AuthenticatedRequest, res: Response) => {
-    console.log(req.userId)
+    const userId = req.userId;
+
+    try{
+        const myBlogs = await blogService.getAllBlogsById(userId);
+        res.status(200).json({message: "all blogs by user" , data: myBlogs})
+    }catch{
+        res.status(400).json({message: "something got wrong in getMyBlogs"})
+    }
 }
 
 export const deleteBlogById = async (req: AuthenticatedRequest, res: Response) => {

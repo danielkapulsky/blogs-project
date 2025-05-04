@@ -8,7 +8,11 @@ export class blogService {
     }
     static async getAllBlogs(){
         const allBlogs = await Blog.find();
-        return {allBlogs}
+        return allBlogs
+    }
+    static async getAllBlogsById(id: string) {
+        const allBlogs = await Blog.find({userId: id});
+        return allBlogs
     }
     static async getBlogById(id: string){
         const blog = await Blog.findOne({_id:id})
