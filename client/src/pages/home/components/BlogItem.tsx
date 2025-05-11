@@ -6,16 +6,22 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { IBlogEntity } from '../../../interfaces/blogInterface';
 import { useNavigate } from 'react-router-dom';
+import EditNoteSharpIcon from '@mui/icons-material/EditNoteSharp';
+import {useLocation} from "react-router";
+
 interface BlogItemProps {
   blog: IBlogEntity
 }
 
 const BlogItem = ({ blog }: BlogItemProps) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isMyItem = location?.pathname.includes("myBlogs");
 
-  const navigateHandle = (id: string) => {
-    navigate(`/${id}`)
+  const navigateHandle = ( id: string, pathName:string) => {
+    navigate(`/${pathName}${id}`)
   }
+
 
   return (
     <Card sx={{
@@ -38,8 +44,10 @@ const BlogItem = ({ blog }: BlogItemProps) => {
           {blog.subtitle}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small" onClick={() => navigateHandle(blog._id)}>More info</Button>
+      <CardActions sx={{justifyContent:"space-between"}}>
+        <Button size="small" onClick={() => navigateHandle(blog._id, "")}>More info</Button>
+        
+        {isMyItem && <Button size="small" onClick={()=> navigateHandle(blog._id, "editBlog/")}><EditNoteSharpIcon fontSize='large'/></Button>}
       </CardActions>
     </Card>
   )

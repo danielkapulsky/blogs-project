@@ -13,11 +13,12 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import classes from "./SingleBlog.module.scss";
+import Loader from '../../components/loader/Loader';
 const SingleBlog = () => {
   const { id } = useParams();
-  if (!id) return <div>Loading...</div>
+  if (!id) return <Loader/>
   const { data, isLoading, error } = useGetBlogByIdQuery(id)
-  if(!data) return <div>Loading...</div>
+  if(!data) return <Loader/>
 
   
   return (

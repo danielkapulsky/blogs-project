@@ -7,14 +7,8 @@ import { useCreateBlogMutation } from '../../services/blog';
 import validator from 'validator';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { dropdownOptions } from '../../consts/consts';
 
-const dropdownOptions = [
-  { label: "Nature", value: "nature" },
-  { label: "Entertainment", value: "entertainment" },
-  { label: "LifeStyle", value: "lifeStyle" },
-  { label: "Tech", value: "tech" },
-  { label: "News", value: "news" },
-]
 
 const CreateBlog = () => {
   const [blogFormData, setBlogFormData] = useState<IBlogForm>({ title: "", subtitle: "", text: "", img: "", catagory: "" });
@@ -81,8 +75,6 @@ const CreateBlog = () => {
     } else return;
     
   }
-
-  console.log(errors)
 
   return (
     <div>
