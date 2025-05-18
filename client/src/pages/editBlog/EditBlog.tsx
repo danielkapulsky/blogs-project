@@ -1,31 +1,48 @@
 import { Paper, Typography, FormControl, Stack, TextField, InputLabel, Select, MenuItem, FormHelperText, Button } from '@mui/material'
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { IBlogError, IBlogForm } from '../../interfaces/blogInterface';
 import { dropdownOptions } from '../../consts/consts';
 import SendIcon from '@mui/icons-material/Send';
 import Loader from '../../components/loader/Loader';
+import { useParams } from 'react-router-dom';
+import { useGetBlogByIdQuery } from '../../services/blog';
 
 const EditBlog = () => {
-    // const { id } = useParams();
-    // if (!id) return <Loader/>
-    // const { data, isLoading, error } = useGetBlogByIdQuery(id)
-    // if(!data) return <Loader/>
-  const [blogFormData, setBlogFormData] = useState<IBlogForm>({ title: "", subtitle: "", text: "", img: "", catagory: "" });
+  const { id } = useParams();
+  const { data, isLoading, error } = useGetBlogByIdQuery(id ?? "");
+
+  const [blogFormData, setBlogFormData] = useState<IBlogForm>({
+    title: "",
+    subtitle: "",
+    text: "",
+    img: "",
+    catagory: ""
+  });
   const [errors, setErrors] = useState<IBlogError | null>(null);
+
+  useEffect(() => {
+    if (data) {
+      setBlogFormData({
+        title: data.data.title || "",
+        subtitle: data.data.subtitle || "",
+        text: data.data.text || "",
+        img: data.data.img || "",
+        catagory: data.data.catagory || ""
+      });
+    }
+  }, [data]);
+
 
   const onHandleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const updatedForm = { ...blogFormData, [name]: value };
-    setBlogFormData(updatedForm)
-  }
-
-  console.log(blogFormData)
+    setBlogFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const onHandleSubmit = () => {
-    
+    // Implementation...
+  };
 
-  }
-
+  if (isLoading || !id || !data) return <Loader />;
 
 
   return (
@@ -41,7 +58,7 @@ const EditBlog = () => {
           border: "2px solid #fff"
         }}>
         <Typography variant="h4" gutterBottom align="center">
-          Create Blog
+          Edit Blog
         </Typography>
 
         <FormControl sx={{ width: "100%" }}>
@@ -118,12 +135,3 @@ const EditBlog = () => {
 }
 
 export default EditBlog
-
-function useParams(): { id: any; } {
-  throw new Error('Function not implemented.');
-}
-
-
-function useGetBlogByIdQuery(id: any): { data: any; isLoading: any; error: any; } {
-  throw new Error('Function not implemented.');
-}

@@ -8,7 +8,7 @@ const useAuthInitialization = () => {
 
     useEffect(() => {
         const authToken = Cookies.get("authToken");
-        console.log("Retrieved authToken from cookies:", authToken);
+        // console.log("Retrieved authToken from cookies:", authToken);
 
         if (authToken) {
             dispatch(setAuthToken(authToken));
