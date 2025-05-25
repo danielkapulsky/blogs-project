@@ -4,12 +4,17 @@ import { IBlogError, IBlogForm } from '../../interfaces/blogInterface';
 import { dropdownOptions } from '../../consts/consts';
 import SendIcon from '@mui/icons-material/Send';
 import Loader from '../../components/loader/Loader';
-import { useParams } from 'react-router-dom';
-import { useGetBlogByIdQuery } from '../../services/blog';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEditBlogByIdMutation, useGetBlogByIdQuery } from '../../services/blog';
+import { useBlogFormValidation } from '../../hooks/useBlogFormValidation';
+import { toast } from 'react-toastify';
 
 const EditBlog = () => {
   const { id } = useParams();
   const { data, isLoading, error } = useGetBlogByIdQuery(id ?? "");
+  const [editBlog] = useEditBlogByIdMutation()
+  const { isValidate, errors } = useBlogFormValidation()
+  const navigate = useNavigate()
 
   const [blogFormData, setBlogFormData] = useState<IBlogForm>({
     title: "",
@@ -18,7 +23,6 @@ const EditBlog = () => {
     img: "",
     catagory: ""
   });
-  const [errors, setErrors] = useState<IBlogError | null>(null);
 
   useEffect(() => {
     if (data) {
@@ -38,8 +42,20 @@ const EditBlog = () => {
     setBlogFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const onHandleSubmit = () => {
-    // Implementation...
+  const onHandleSubmit = async () => {
+    if (isValidate(blogFormData)) {
+      if(!id) return;
+      try {
+        const data = await editBlog({id, payload: blogFormData});
+        navigate("/myBlogs");
+        toast.success("edit blog Successfully")
+        console.log(data);
+      } catch (err) {
+        console.log(err)
+      }
+    } else {
+      return
+    }
   };
 
   if (isLoading || !id || !data) return <Loader />;

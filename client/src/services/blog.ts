@@ -52,7 +52,7 @@ export const blogApi = createApi({
     }),
     editBlogById: builder.mutation<IBlogsResponse, {id:string, payload:IBlogForm}>({
       query: ({id, payload}) => ({
-        url: `/editBlog/${id}`,
+        url: `/${id}`,
         method: "PUT",
         body:payload,
       })

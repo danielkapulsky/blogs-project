@@ -2,19 +2,20 @@ import { Button, FormControl, FormHelperText, InputLabel, MenuItem, Paper, Selec
 import TextField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
 import { ChangeEvent, useState } from 'react';
-import { IBlogError, IBlogForm } from '../../interfaces/blogInterface';
+import { IBlogForm } from '../../interfaces/blogInterface';
 import { useCreateBlogMutation } from '../../services/blog';
-import validator from 'validator';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { dropdownOptions } from '../../consts/consts';
+import { useBlogFormValidation } from '../../hooks/useBlogFormValidation';
 
 
 const CreateBlog = () => {
   const [blogFormData, setBlogFormData] = useState<IBlogForm>({ title: "", subtitle: "", text: "", img: "", catagory: "" });
   const [createBlog] = useCreateBlogMutation();
-  const [errors, setErrors] = useState<IBlogError | null>(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { errors, isValidate } = useBlogFormValidation();
+
 
   const onHandleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -22,47 +23,8 @@ const CreateBlog = () => {
     setBlogFormData(updatedForm)
   }
 
-  const validateForm = () => {
-    const newErrors = {} as IBlogError;
-
-    if (validator.isEmpty(blogFormData.title)) {
-      newErrors.title = 'Title is required';
-    } else if (!validator.isLength(blogFormData.title, { min: 2, max: 100 })) {
-      newErrors.title = 'Title must be between 2 and 100 characters';
-      console.log(newErrors.title)
-    }
-
-    if (validator.isEmpty(blogFormData.subtitle)) {
-      newErrors.subtitle = 'Subtitle is required';
-    } else if (!validator.isLength(blogFormData.subtitle, { min: 2, max: 100 })) {
-      newErrors.subtitle = 'Subtitle must be between 2 and 100 characters';
-      console.log(newErrors.subtitle)
-    }
-
-    if (validator.isEmpty(blogFormData.text)) {
-      newErrors.text = 'Text is required';
-    } else if (!validator.isLength(blogFormData.text, { min: 2, max: 500 })) {
-      newErrors.text = 'Text must be between 2 and 500 characters';
-      console.log(newErrors.text)
-    }
-
-    if (validator.isEmpty(blogFormData.img)) {
-      newErrors.img = 'Image Url is required';
-    } else if (!validator.isURL(blogFormData.img)) {
-      newErrors.img = 'Image must be a valid Url';
-      console.log(newErrors.img)
-    }
-
-    if (validator.isEmpty(blogFormData.catagory)) {
-      newErrors.catagory = 'Category is required';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const onHandleSubmit = async () => {
-    if (validateForm()) {
+    if (isValidate(blogFormData)) {
       try {
         const data = await createBlog(blogFormData);
         navigate("/");
@@ -73,7 +35,7 @@ const CreateBlog = () => {
       }
 
     } else return;
-    
+
   }
 
   return (

@@ -1,10 +1,14 @@
 import { useGetMyBlogsQuery } from '../../services/blog';
 import { Stack } from '@mui/material';
 import BlogItem from '../home/components/BlogItem';
+import { useEffect } from 'react';
 
 const MyBlogs = () => {
-   const {data:blogData} = useGetMyBlogsQuery();
-   console.log(blogData)
+   const {data:blogData, refetch} = useGetMyBlogsQuery();
+  //  useEffect(() => {
+  //   refetch();
+  //  },[])
+  
   return (
     <div>
       <Stack spacing={3} 
