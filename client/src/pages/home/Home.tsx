@@ -13,6 +13,7 @@ const Home = () => {
            flexDirection="row"
            flexWrap="wrap"
            gap="10px"
+           justifyContent="center"
            alignItems="flex-end">
         {blogData?.map((blog) => (
           <BlogItem blog={blog} key={blog._id}/>

@@ -17,6 +17,7 @@ import CreateBlog from './pages/createBlog/CreateBlog.tsx';
 import EditBlog from './pages/editBlog/EditBlog.tsx';
 import { Provider } from 'react-redux';
 import { store } from './store/store.ts';
+import ProtectedRoute from './components/protectedRoute/ProtectedRoute.tsx';
 
 const router = createBrowserRouter([
   {
@@ -28,26 +29,6 @@ const router = createBrowserRouter([
         element: <Home />
       },
       {
-        path: "/:id",
-        element: <SingleBlog />
-      },
-      {
-        path: "/favorites",
-        element: <Favorites />
-      },
-      {
-        path: "/myBlogs",
-        element: <MyBlogs />
-      },
-      {
-        path: "/createBlog",
-        element: <CreateBlog />
-      },
-      {
-        path: "/editBlog/:id",
-        element: <EditBlog />
-      },
-      {
         path: "/login",
         element: <Login />
       },
@@ -56,8 +37,33 @@ const router = createBrowserRouter([
         element: <Signup />
       },
       {
-        path: "/users",
-        element: <Users />
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: "/myBlogs",
+            element: <MyBlogs />
+          },
+          {
+            path: "/:id",
+            element: <SingleBlog />
+          },
+          {
+            path: "/favorites",
+            element: <Favorites />
+          },
+          {
+            path: "/createBlog",
+            element: <CreateBlog />
+          },
+          {
+            path: "/editBlog/:id",
+            element: <EditBlog />
+          },
+          {
+            path: "/users",
+            element: <Users />
+          },
+        ]
       },
     ]
   },

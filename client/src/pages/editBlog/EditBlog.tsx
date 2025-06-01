@@ -1,4 +1,4 @@
-import { Paper, Typography, FormControl, Stack, TextField, InputLabel, Select, MenuItem, FormHelperText, Button } from '@mui/material'
+import { Paper, Typography, FormControl, Stack, TextField, InputLabel, Select, MenuItem, FormHelperText, Button, Box } from '@mui/material'
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { IBlogError, IBlogForm } from '../../interfaces/blogInterface';
 import { dropdownOptions } from '../../consts/consts';
@@ -8,6 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEditBlogByIdMutation, useGetBlogByIdQuery } from '../../services/blog';
 import { useBlogFormValidation } from '../../hooks/useBlogFormValidation';
 import { toast } from 'react-toastify';
+import { GrLinkPrevious } from "react-icons/gr";
 
 const EditBlog = () => {
   const { id } = useParams();
@@ -15,6 +16,10 @@ const EditBlog = () => {
   const [editBlog] = useEditBlogByIdMutation()
   const { isValidate, errors } = useBlogFormValidation()
   const navigate = useNavigate()
+
+  const onHandleBack = () => {
+    navigate('/myBlogs')
+  }
 
   const [blogFormData, setBlogFormData] = useState<IBlogForm>({
     title: "",
@@ -140,9 +145,12 @@ const EditBlog = () => {
               </Select>
               {errors?.catagory && <FormHelperText>{errors.catagory}</FormHelperText>}
             </FormControl>
-            <Button type='submit' variant="contained" endIcon={<SendIcon />} onClick={onHandleSubmit}>
-              Send
-            </Button>
+            <Stack flexDirection="row" justifyContent="space-between">
+              <Button type='submit' variant="contained" endIcon={<SendIcon />} onClick={onHandleSubmit}>
+                  Send
+              </Button>
+              <Button onClick={onHandleBack}><GrLinkPrevious /></Button>
+            </Stack>
           </Stack>
         </FormControl>
       </Paper>

@@ -19,6 +19,7 @@ import Switch from '@mui/material/Switch';
 import { MdDarkMode, MdLightMode } from "react-icons/md";
 import { toggleTheme } from '../../services/themeSlice';
 import { toast } from 'react-toastify';
+import { useLogoutMutation } from '../../services/user';
 
 interface Props {
   window?: () => Window;
@@ -31,6 +32,7 @@ const Navbar = (props: Props) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const auth = useSelector((state: RootState) => state.auth);
   const theme = useSelector((state: RootState) => state.theme);
+  const [logout] = useLogoutMutation()
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -39,6 +41,7 @@ const Navbar = (props: Props) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
+      await logout();
       dispatch(clearAuthToken());
       navigate('/login');
       toast.success("User Logged out successfully")

@@ -119,7 +119,7 @@ export const logout = (req: Request, res: Response) => {
     res.clearCookie("authToken", {
       httpOnly: true,
       sameSite: "strict"
-    })
+    }).json({message:"User Logged out successfully"})
   } catch (error) {
     res.status(400).json({ message: error });
     

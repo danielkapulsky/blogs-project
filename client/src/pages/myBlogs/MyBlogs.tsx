@@ -5,9 +5,9 @@ import { useEffect } from 'react';
 
 const MyBlogs = () => {
    const {data:blogData, refetch} = useGetMyBlogsQuery();
-  //  useEffect(() => {
-  //   refetch();
-  //  },[])
+   useEffect(() => {
+    refetch();
+   },[])
   
   return (
     <div>
@@ -16,6 +16,7 @@ const MyBlogs = () => {
            flexDirection="row"
            flexWrap="wrap"
            gap="10px"
+           justifyContent="center"
            alignItems="flex-end">
           {blogData?.data?.map((item) => (
           <BlogItem blog={item} key={item._id}/>
