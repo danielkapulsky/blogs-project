@@ -60,7 +60,7 @@ export const deleteBlogById = async (req: AuthenticatedRequest, res: Response) =
     try{
         const blog = await blogService.getBlogById(id);
         if(userId !== blog.userId)  return res.sendStatus(401).json({message: "Unauthorized, must be the user who created the blog"});
-
+        
         const deletedBlog = await blogService.deleteBlogById(id);
         if (!deletedBlog) return res.status(404).json({message: "blog not found"});
         const blogs = await blogService.getAllBlogs();

@@ -15,7 +15,7 @@ const Home = () => {
            gap="10px"
            justifyContent="center"
            alignItems="flex-end">
-        {blogData?.map((blog) => (
+        {blogData?.map((blog: any) => (
           <BlogItem blog={blog} key={blog._id}/>
         ))}
       </Stack>

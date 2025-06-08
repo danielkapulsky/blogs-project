@@ -57,9 +57,16 @@ export const blogApi = createApi({
         body:payload,
       })
     }),
+    deleteBlogById: builder.mutation<IBlogsResponse, string>({
+      query: (id) => ({
+        url:`/${id}`,
+        method: "DELETE",
+      })
+    }),
+    // toggleBlogLike: builder.mutation<
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetAllBlogsQuery, useCreateBlogMutation , useGetBlogByIdQuery, useGetMyBlogsQuery, useEditBlogByIdMutation} = blogApi;
+export const { useGetAllBlogsQuery, useCreateBlogMutation , useGetBlogByIdQuery, useGetMyBlogsQuery, useEditBlogByIdMutation, useDeleteBlogByIdMutation} = blogApi;
