@@ -98,9 +98,11 @@ export const toggleBlogLike = async (req: AuthenticatedRequest, res: Response) =
         const isAlreadyLiked = blog.likes.includes(userId);
         const query = isAlreadyLiked ? {$pull: {likes: userId}} : {$push: {likes: userId}};
 
-        const updatedBlog = await blogService.toggleById(id, query);
+        await blogService.toggleById(id, query);
 
-        res.status(200).json({message: "blog edited succefully" , data: {blog: updatedBlog}})
+        const blogs = await blogService.getAllBlogs();
+
+        res.status(200).json({message: "blog edited succefully" , data: {blogs}})
     }catch(error){
         res.status(401).json({message: error.message})
     }

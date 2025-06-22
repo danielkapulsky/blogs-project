@@ -3,8 +3,9 @@ import BlogItem from './components/BlogItem';
 import { Stack } from '@mui/material';
 
 const Home = () => {
-  const {data} = useGetAllBlogsQuery();
+  const {data, refetch} = useGetAllBlogsQuery();
   const blogData = data?.data;
+  const blogsRefetch = () => {refetch()};
 
   return (
     <div>
@@ -16,7 +17,7 @@ const Home = () => {
            justifyContent="center"
            alignItems="flex-end">
         {blogData?.map((blog: any) => (
-          <BlogItem blog={blog} key={blog._id}/>
+          <BlogItem blog={blog} key={blog._id} blogsRefetch={blogsRefetch}/>
         ))}
       </Stack>
     </div>

@@ -9,41 +9,54 @@ import { useNavigate } from 'react-router-dom';
 import EditNoteSharpIcon from '@mui/icons-material/EditNoteSharp';
 import { useLocation } from "react-router";
 import { MdDelete } from "react-icons/md";
-import { useDeleteBlogByIdMutation } from '../../../services/blog';
+import { useDeleteBlogByIdMutation, useToggleBlogLikeMutation } from '../../../services/blog';
 import { toast } from 'react-toastify';
-import { FcLike } from "react-icons/fc";
+import { AiFillDislike } from "react-icons/ai";
+import { AiFillLike } from "react-icons/ai";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 
 interface BlogItemProps {
   blog: IBlogEntity
-  handleBlogDelete?: () => void
+  blogsRefetch?: () => void
 }
 
-const BlogItem = ({ blog, handleBlogDelete }: BlogItemProps) => {
+const BlogItem = ({ blog, blogsRefetch }: BlogItemProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const isMyItem = location?.pathname.includes("myBlogs");
   const [deleteBlog] = useDeleteBlogByIdMutation()
-  const isUserLogged = useSelector((state:RootState) => state.auth.token);
-  
+  const isUserLogged = useSelector((state: RootState) => state.auth.token);
+  const [likeBlog] = useToggleBlogLikeMutation();
+  const likesNumber = blog.likes.length;
+  const activeUser = useSelector((state: RootState) => state.auth.user);
+  const isMyId = blog.likes.some((likeId) => { likeId === activeUser?._id }); //degub next lesson
 
   const navigateHandle = (id: string, pathName: string) => {
     navigate(`/${pathName}${id}`)
   }
 
   const onBlogDeleteHandler = async () => {
-    if (!handleBlogDelete) return;
+    if (!blogsRefetch) return;
 
     try {
       await deleteBlog(blog._id);
-      handleBlogDelete();
+      blogsRefetch();
       toast.success("blog deleted Successfully")
     } catch (error) {
       console.log(error)
     }
   }
+  const onBlogLikeHandler = async () => {
+    if (!blogsRefetch) return;
 
+    try {
+      await likeBlog(blog._id);
+      blogsRefetch();
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <Card sx={{
@@ -72,9 +85,9 @@ const BlogItem = ({ blog, handleBlogDelete }: BlogItemProps) => {
         {isMyItem && <Button size="small" onClick={() => navigateHandle(blog._id, "editBlog/")}><EditNoteSharpIcon fontSize='large' /></Button>}
         {isMyItem && <Button size="large" onClick={onBlogDeleteHandler}><MdDelete size={24} /></Button>}
         {isUserLogged && <CardActions>
-          <Button><FcLike /></Button>
-          <p>100</p>
-          </CardActions> } 
+          <Button onClick={onBlogLikeHandler}>{isMyId ? <AiFillDislike /> : <AiFillLike />}</Button>
+          <p>{likesNumber}</p>
+        </CardActions>}
 
       </CardActions>
     </Card>

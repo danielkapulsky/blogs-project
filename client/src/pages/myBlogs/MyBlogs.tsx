@@ -9,8 +9,7 @@ const MyBlogs = () => {
     refetch();
    },[])
 
-   const handleBlogDelete = () => {refetch()};
-   
+   const blogsRefetch = () => {refetch()};
   
   return (
     <div>
@@ -22,7 +21,7 @@ const MyBlogs = () => {
            justifyContent="center"
            alignItems="flex-end">
           {blogData?.data?.map((item:any) => (
-          <BlogItem blog={item} key={item._id} handleBlogDelete={handleBlogDelete}/>
+          <BlogItem blog={item} key={item._id} blogsRefetch={blogsRefetch}/>
         ))}
       </Stack>
       
