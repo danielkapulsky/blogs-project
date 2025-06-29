@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useGetBlogByIdQuery } from '../../services/blog';
+import { useGetBlogByIdQuery, useToggleBlogLikeMutation } from '../../services/blog';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -9,25 +9,60 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import { FaRegHeart, FaHeart } from "react-icons/fa";
 import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import classes from "./SingleBlog.module.scss";
 import Loader from '../../components/loader/Loader';
-const SingleBlog = () => {
-  const { id } = useParams();
-  if (!id) return <Loader/>
-  const { data, isLoading, error } = useGetBlogByIdQuery(id)
-  if(!data) return <Loader/>
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import { skipToken } from '@reduxjs/toolkit/query'
 
-  
+const SingleBlog = () => {
+  // const { id } = useParams();
+  // const { data, isLoading, error, refetch} = useGetBlogByIdQuery(id ?? skipToken)
+  // if (!id) return <Loader />
+  // if (!data) return <Loader />
+  // const [likeBlog] = useToggleBlogLikeMutation();
+  // const { title, createdAt, img, text } = data.data;
+  // const activeUser = useSelector((state: RootState) => state.auth.user);
+  // const isLiked = data.data.likes.some((likeId) => likeId === activeUser?._id);
+
+   const { id } = useParams();
+
+  // ✅ Always call hooks unconditionally
+  const { data, isLoading, error, refetch } = useGetBlogByIdQuery(id ?? skipToken);
+  const [likeBlog] = useToggleBlogLikeMutation();
+  const activeUser = useSelector((state: RootState) => state.auth.user);
+
+  // ✅ Return loading state after all hooks
+  if (!id || isLoading || !data) {
+    return <Loader />;
+  }
+
+  const { title, createdAt, img, text, likes, _id } = data.data;
+  const isLiked = likes?.some((likeId) => likeId === activeUser?._id);
+
+  //test next lesson the like/unlike in single blog and explain the refactor
+
+
+
+  const onBlogLikeHandler = async () => {
+    try {
+      await likeBlog(data.data._id);
+      refetch();
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className={classes.singleBlogContainer}>
       <Card sx={{ maxWidth: 345 }}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              R
+
             </Avatar>
           }
           action={
@@ -35,25 +70,23 @@ const SingleBlog = () => {
               <MoreVertIcon />
             </IconButton>
           }
-          title="Shrimp and Chorizo Paella"
-          subheader="September 14, 2016"
+          title={title}
+          subheader={createdAt?.toString()}
         />
         <CardMedia
           component="img"
           height="194"
-          image="/static/images/cards/paella.jpg"
+          image={img}
           alt="Paella dish"
         />
         <CardContent>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            This impressive paella is a perfect party dish and a fun meal to cook
-            together with your guests. Add 1 cup of frozen peas along with the mussels,
-            if you like.
+            {text}
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
+          <IconButton aria-label="add to favorites" onClick={onBlogLikeHandler}>
+            {isLiked? <FaHeart /> : <FaRegHeart/>}
           </IconButton>
           <IconButton aria-label="share">
             <ShareIcon />

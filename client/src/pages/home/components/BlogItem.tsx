@@ -30,7 +30,7 @@ const BlogItem = ({ blog, blogsRefetch }: BlogItemProps) => {
   const [likeBlog] = useToggleBlogLikeMutation();
   const likesNumber = blog.likes.length;
   const activeUser = useSelector((state: RootState) => state.auth.user);
-  const isMyId = blog.likes.some((likeId) => { likeId === activeUser?._id }); //degub next lesson
+  const isMyId = blog.likes.some((likeId) => likeId === activeUser?._id );
 
   const navigateHandle = (id: string, pathName: string) => {
     navigate(`/${pathName}${id}`)
@@ -80,7 +80,7 @@ const BlogItem = ({ blog, blogsRefetch }: BlogItemProps) => {
         </Typography>
       </CardContent>
       <CardActions sx={{ justifyContent: "space-between" }}>
-        <Button size="small" onClick={() => navigateHandle(blog._id, "")}>More info</Button>
+        {isUserLogged && <Button size="small" onClick={() => navigateHandle(blog._id, "")}>More info</Button>}
 
         {isMyItem && <Button size="small" onClick={() => navigateHandle(blog._id, "editBlog/")}><EditNoteSharpIcon fontSize='large' /></Button>}
         {isMyItem && <Button size="large" onClick={onBlogDeleteHandler}><MdDelete size={24} /></Button>}

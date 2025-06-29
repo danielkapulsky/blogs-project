@@ -2,6 +2,7 @@ import { useGetMyBlogsQuery } from '../../services/blog';
 import { Stack } from '@mui/material';
 import BlogItem from '../home/components/BlogItem';
 import { useEffect } from 'react';
+import { useGetAllBlogsQuery } from '../../services/blog'; 
 
 const MyBlogs = () => {
    const {data:blogData, refetch} = useGetMyBlogsQuery();
