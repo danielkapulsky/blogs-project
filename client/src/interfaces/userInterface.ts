@@ -31,5 +31,5 @@ export interface IError {
 
 export interface UserPayload {
   _id: string
-  role: UserPayload
+  role: UserRole
 }

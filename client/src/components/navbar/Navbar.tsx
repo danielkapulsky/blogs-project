@@ -35,6 +35,7 @@ const Navbar = (props: Props) => {
   const [logout] = useLogoutMutation()
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  console.log(auth)
 
 
   const handleLogout = async () => {

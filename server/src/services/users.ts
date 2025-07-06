@@ -9,7 +9,7 @@ export class userService {
     }
     static async getAllUser(){
         const alluser = await User.find();
-        return {alluser}
+        return alluser
     }
     static async getUserById(id: string){
         const user = await User.findOne({_id:id})

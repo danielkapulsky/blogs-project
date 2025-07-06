@@ -19,23 +19,10 @@ import { RootState } from '../../store/store';
 import { skipToken } from '@reduxjs/toolkit/query'
 
 const SingleBlog = () => {
-  // const { id } = useParams();
-  // const { data, isLoading, error, refetch} = useGetBlogByIdQuery(id ?? skipToken)
-  // if (!id) return <Loader />
-  // if (!data) return <Loader />
-  // const [likeBlog] = useToggleBlogLikeMutation();
-  // const { title, createdAt, img, text } = data.data;
-  // const activeUser = useSelector((state: RootState) => state.auth.user);
-  // const isLiked = data.data.likes.some((likeId) => likeId === activeUser?._id);
-
    const { id } = useParams();
-
-  // ✅ Always call hooks unconditionally
   const { data, isLoading, error, refetch } = useGetBlogByIdQuery(id ?? skipToken);
   const [likeBlog] = useToggleBlogLikeMutation();
   const activeUser = useSelector((state: RootState) => state.auth.user);
-
-  // ✅ Return loading state after all hooks
   if (!id || isLoading || !data) {
     return <Loader />;
   }
@@ -43,13 +30,9 @@ const SingleBlog = () => {
   const { title, createdAt, img, text, likes, _id } = data.data;
   const isLiked = likes?.some((likeId) => likeId === activeUser?._id);
 
-  //test next lesson the like/unlike in single blog and explain the refactor
-
-
-
   const onBlogLikeHandler = async () => {
     try {
-      await likeBlog(data.data._id);
+      await likeBlog(_id);
       refetch();
     } catch (error) {
       console.log(error)

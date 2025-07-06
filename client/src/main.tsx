@@ -18,6 +18,7 @@ import EditBlog from './pages/editBlog/EditBlog.tsx';
 import { Provider } from 'react-redux';
 import { store } from './store/store.ts';
 import ProtectedRoute from './components/protectedRoute/ProtectedRoute.tsx';
+import ProtectedAdminRoute from './components/ProtectedAdminRoute/ProtectedAdminRoute.tsx';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,15 @@ const router = createBrowserRouter([
       {
         path: "/signup",
         element: <Signup />
+      },
+      {
+        element: <ProtectedAdminRoute/>,
+        children:[
+          {
+            path: "/users",
+            element: <Users />
+          },
+        ],
       },
       {
         element: <ProtectedRoute />,
@@ -58,10 +68,6 @@ const router = createBrowserRouter([
           {
             path: "/editBlog/:id",
             element: <EditBlog />
-          },
-          {
-            path: "/users",
-            element: <Users />
           },
         ]
       },
